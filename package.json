@@ -1,0 +1,16 @@
+{
+  "name": "puppeteer-screenshot-service",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "latest",
+    "puppeteer": "latest"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
