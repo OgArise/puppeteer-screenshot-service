@@ -1,18 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // ✅ Moved from experimental → top-level
+  // Next 15+ location (correct)
   serverExternalPackages: ['puppeteer'],
 
-  // ✅ Keep webpack config to handle Puppeteer
   webpack: (config, { isServer }) => {
     if (isServer) {
-      config.externals.push('puppeteer');
+      config.externals = [...(config.externals || []), 'puppeteer'];
     }
     return config;
   },
-
-  // Optional: Explicitly opt out of telemetry (if desired)
-  telemetryDisabled: true
 };
 
 module.exports = nextConfig;
