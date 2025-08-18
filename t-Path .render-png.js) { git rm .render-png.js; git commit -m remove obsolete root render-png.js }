@@ -5,7 +5,9 @@ import puppeteer from 'puppeteer-core';
 chromium.setHeadlessMode = true;
 chromium.setGraphicsMode = false;
 
-export const config = { api: { bodyParser: { sizeLimit: '1mb' } } };
+export const config = {
+  api: { bodyParser: { sizeLimit: '1mb' } }
+};
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -20,13 +22,7 @@ export default async function handler(req, res) {
 
   let browser;
   try {
-    const executablePath = await chromium.executablePath();
-    console.log('ExecutablePath =>', executablePath);
-
-    if (!executablePath) {
-      // Make it obvious in logs and response if this ever happens
-      throw new Error('chromium.executablePath() returned null');
-    }
+    const executablePath = await chromium.executablePath(); // 🔥 force serverless chrome path
 
     browser = await puppeteer.launch({
       args: chromium.args,
@@ -41,18 +37,17 @@ export default async function handler(req, res) {
 
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: ['domcontentloaded', 'networkidle0'] });
+
     const png = await page.screenshot({ type: 'png' });
+
     await browser.close();
 
     res.setHeader('Content-Type', 'image/png');
     res.setHeader('Cache-Control', 'no-store');
-    return res.status(200).end(png);
+    res.status(200).end(png);
   } catch (err) {
     if (browser) try { await browser.close(); } catch {}
-    console.error('Render failed:', err);
-    return res.status(500).json({
-      error: 'Render failed',
-      details: String(err?.message || err)
-    });
+    console.error('Render error:', err);
+    res.status(500).json({ error: 'Render failed', details: String(err?.message || err) });
   }
 }

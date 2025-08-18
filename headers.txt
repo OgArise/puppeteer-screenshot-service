@@ -1,0 +1,15 @@
+HTTP/1.1 500 Internal Server Error
+Access-Control-Allow-Headers: Content-Type
+Access-Control-Allow-Methods: POST, OPTIONS
+Access-Control-Allow-Origin: *
+Cache-Control: public, max-age=0, must-revalidate
+Content-Length: 42
+Content-Type: application/json; charset=utf-8
+Date: Mon, 18 Aug 2025 07:38:44 GMT
+Etag: "xmf0qeijda16"
+Server: Vercel
+Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+X-Matched-Path: /api/render-png
+X-Vercel-Cache: MISS
+X-Vercel-Id: pdx1::iad1::q5zwl-1755502724197-6fde169c8d18
+
