@@ -1,5 +1,6 @@
 // pages/api/render-png.js
-import { chromium } from 'playwright-aws-lambda';
+const puppeteer = require('puppeteer-core');
+const chromium = require('chrome-aws-lambda');
 
 export default async function handler(req, res) {
   // CORS headers
@@ -23,18 +24,18 @@ export default async function handler(req, res) {
 
   let browser;
   try {
-    // Launch Chromium from playwright-aws-lambda
-    browser = await chromium.launch({
-      executablePath: process.env.CHROME_EXECUTABLE_PATH || undefined,
-      headless: true,
+    browser = await puppeteer.launch({
+      executablePath: await chromium.executablePath,
+      args: chromium.args,
+      headless: chromium.headless,
+      defaultViewport: { width: 600, height: 800 }
     });
 
     const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: 'networkidle' });
+    await page.setContent(html, { waitUntil: 'networkidle0' });
 
     const screenshot = await page.screenshot({
       type: 'png',
-      fullPage: false,
       clip: { x: 0, y: 0, width: 600, height: 800 }
     });
 
@@ -44,7 +45,7 @@ export default async function handler(req, res) {
     res.setHeader('Cache-Control', 's-maxage=31536000');
     res.send(screenshot);
   } catch (error) {
-    console.error('Playwright error:', error);
+    console.error('Puppeteer error:', error);
     if (browser) await browser.close().catch(() => {});
     res.status(500).json({ error: 'Failed to generate screenshot.' });
   }

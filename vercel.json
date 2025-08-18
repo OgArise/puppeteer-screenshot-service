@@ -1,0 +1,14 @@
+{
+  "builds": [
+    {
+      "src": "pages/api/render-png.js",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": [
+          "node_modules/playwright-core/**",
+          "node_modules/@playwright/test/**"
+        ]
+      }
+    }
+  ]
+}
