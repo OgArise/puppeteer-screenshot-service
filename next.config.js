@@ -1,17 +1,18 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  // Move from experimental to top-level
+// next.config.js
+module.exports = {
   serverExternalPackages: ['puppeteer'],
-
-  webpack: (config, { isServer }) => {
+  webpack: (config, {isServer}) => {
     if (isServer) {
       config.externals.push('puppeteer');
     }
     return config;
   },
-
-  // Optional: Explicitly set output for serverless functions
-  output: 'standalone'
+  async rewrites() {
+    return [
+      {
+        source: '/api/render-png',
+        destination: '/api/route',
+      },
+    ];
+  },
 };
-
-module.exports = nextConfig;
