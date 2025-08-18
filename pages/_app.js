@@ -1,8 +1,4 @@
 // pages/_app.js
-import { AppType } from 'next/app';
-
-const MyApp = ({ Component, pageProps}) => {
-  return <component {...pageProps} />;
-};
-
-export default MyApp;
+export default function MyApp({ Component, pageProps }) {
+  return <Component {...pageProps} />;
+}
