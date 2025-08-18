@@ -1,18 +1,19 @@
 // next.config.js
-module.exports = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   serverExternalPackages: ['puppeteer'],
-  webpack: (config, {isServer}) => {
+
+  webpack: (config, { isServer }) => {
     if (isServer) {
       config.externals.push('puppeteer');
     }
     return config;
   },
-  async rewrites() {
-    return [
-      {
-        source: '/api/render-png',
-        destination: '/api/route',
-      },
-    ];
-  },
+
+  // Reduce noise
+  logging: 'off',
+  // Optional: disable telemetry
+  telemetryDisabled: true,
 };
+
+module.exports = nextConfig;
