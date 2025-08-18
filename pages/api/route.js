@@ -3,38 +3,40 @@ import puppeteer from 'puppeteer';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed. Use POST.'});
+    return res.status(405).json({ error: 'Method not allowed. Use POST.' });
   }
 
   const { html } = req.body;
   if (!html) {
-    return res.status(400).json({error: 'Missinging HTML in request body.'});
+    return res.status(400).json({ error: 'Missing HTML in request body.' });
   }
 
   let browser;
   try {
     browser = await puppeteer.launch({
-      args: ['--no-sandbox','--headless=new'],
+      args: ['--no-sandbox', '--headless=new'],
       timeout: 10000,
     });
 
     const page = await browser.newPage();
-    awaitpage.setContent(html, {waitUntil: 'networkidle0'});
+    await page.setContent(html, { waitUntil: 'networkidle0' });
 
-    const screenshot = awaitpage.screenshot({
+    const screenshot = await page.screenshot({
       type: 'png',
       fullPage: false,
-      clip: {x: 0, y: 0, width: 600, height: 800},
+      clip: { x: 0, y: 0, width: 600, height: 800 },
     });
 
-    awaitbrowser.close();
+    await browser.close();
 
     res.setHeader('Content-Type', 'image/png');
     res.setHeader('Cache-Control', 's-maxage=31536000');
     res.send(screenshot);
   } catch (error) {
-    if (browser) awaitbrowser.close().catch(() => {});
+    if (browser) {
+      await browser.close().catch(() => {});
+    }
     console.error('Puppeteer error:', error);
-    res.status(500).json({error: 'Failed to generate screenshot.'});
+    res.status(500).json({ error: 'Failed to generate screenshot.' });
   }
 }
