@@ -1,17 +1,3 @@
 {
-  "builds": [
-    {
-      "src": "render-png.js",
-      "use": "@vercel/node",
-      "config": {
-        "includeFiles": [
-          "node_modules/chrome-aws-lambda/**",
-          "node_modules/puppeteer-core/**"
-        ]
-      }
-    }
-  ],
-  "routes": [
-    { "src": "/api/render-png", "dest": "/render-png" }
-  ]
+  "rewrites": []
 }
