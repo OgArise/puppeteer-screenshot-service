@@ -1,23 +1,21 @@
 // pages/api/render-png.js
-import { chromium } from 'playwright';
+import { chromium } from 'playwright-aws-lambda';
 
 export default async function handler(req, res) {
-  // ✅ Enable CORS
+  // CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  // ✅ Handle preflight
+  // Handle preflight
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
 
-  // ✅ Only allow POST
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed. Use POST.' });
   }
 
-  // ✅ Parse body
   const { html } = req.body;
   if (!html) {
     return res.status(400).json({ error: 'Missing HTML in request body.' });
@@ -25,7 +23,12 @@ export default async function handler(req, res) {
 
   let browser;
   try {
-    browser = await chromium.launch();
+    // Launch Chromium from playwright-aws-lambda
+    browser = await chromium.launch({
+      executablePath: process.env.CHROME_EXECUTABLE_PATH || undefined,
+      headless: true,
+    });
+
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: 'networkidle' });
 
