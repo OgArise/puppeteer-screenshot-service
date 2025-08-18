@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head><title>Test API</title></head>
+<body>
+<h1>Testing /api/render-png</h1>
+<button onclick="fetchPng()">Generate Screenshot</button>
+<script>
+async function fetchPng() {
+  const response = await fetch('http://localhost:3000/api/render-png', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ html: '<h1>Hello from Browser Test</h1>' })
+  });
+
+  if (response.ok) {
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'test-from-browser.png';
+    a.click();
+  } else {
+    alert('Error: ' + await response.text());
+  }
+}
+</script>
+</body>
+</html>
