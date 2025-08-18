@@ -1,10 +1,8 @@
 {
-  "name": "puppeteer-screenshot-service",
-  "version": "1.0.0",
   "dependencies": {
     "next": "latest",
-    "puppeteer-core": "^2.3.0",
-    "chrome-aws-lambda": "^11.0.0",
+    "puppeteer-core": "10.4.0",
+    "chrome-aws-lambda": "10.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
